@@ -1,1 +1,0 @@
-# Sortify-Algorithm-Visualizer
