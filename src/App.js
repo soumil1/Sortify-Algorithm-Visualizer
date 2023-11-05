@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+import Sortify from './Sortify/Sortify';
 import './App.css';
 
 function App() {
