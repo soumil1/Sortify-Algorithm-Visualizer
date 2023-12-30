@@ -1,0 +1,63 @@
+.element-container{
+    /* display: flex;
+    justify-content: center;
+    align-self: center; */
+    position: absolute;
+    left: 100px;
+    /* top: 50vh; */
+}
+
+.array-bar {
+    width: 2px; 
+    background-color: brown;
+    display: inline-block;
+    margin: 0 1px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.mergeSort-button,
+.quickSort-button,
+.initializing-button,
+.bubbleSort-button,
+.heapSort-button {
+    width: 250px;
+    height: 60px;
+    font-size: 20px;
+}
+
+.mergeSort-button:hover,
+.quickSort-button:hover,
+.initializing-button:hover,
+.bubbleSort-button:hover,
+.heapSort-button:hover {
+    background-color: #45a049;
+}
+
+.mergeSort-button {
+    background-color: #ff7f50;
+   
+}
+
+.quickSort-button {
+    background-color: #f0e68c;
+  
+}
+
+.initializing-button {
+    background-color: #90ee90;
+  
+}
+
+.bubbleSort-button {
+    background-color: #add8e6;
+    
+}
+
+.heapSort-button {
+    background-color: #d3d3d3;
+   
+}
