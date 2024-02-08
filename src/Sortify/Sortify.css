@@ -1,63 +1,97 @@
-.element-container{
-    /* display: flex;
-    justify-content: center;
-    align-self: center; */
+.element-container {
     position: absolute;
     left: 100px;
-    /* top: 50vh; */
 }
 
 .array-bar {
-    width: 2px; 
+    width: 2px;
     background-color: brown;
     display: inline-block;
     margin: 0 1px;
+    transition: background-color 0.3s ease;
 }
 
+.button {
+    width: 480px;
+    height: 120px;
+    font-size: 24px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 .button-container {
     display: flex;
     justify-content: center;
+    gap: 20px;
 }
 
-.mergeSort-button,
-.quickSort-button,
-.initializing-button,
-.bubbleSort-button,
-.heapSort-button {
-    width: 250px;
-    height: 60px;
-    font-size: 20px;
-}
 
-.mergeSort-button:hover,
-.quickSort-button:hover,
-.initializing-button:hover,
-.bubbleSort-button:hover,
-.heapSort-button:hover {
-    background-color: #45a049;
+.button:hover {
+    transform: scale(1.2);
+    /* make the button bigger on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .mergeSort-button {
     background-color: #ff7f50;
-   
+}
+
+.mergeSort-button:hover {
+    background-color: #ff4500;
+    /* darker shade on hover */
 }
 
 .quickSort-button {
     background-color: #f0e68c;
-  
+}
+
+.quickSort-button:hover {
+    background-color: #ffd700;
+    /* darker shade on hover */
 }
 
 .initializing-button {
     background-color: #90ee90;
-  
+}
+
+.initializing-button:hover {
+    background-color: #32cd32;
+    /* darker shade on hover */
 }
 
 .bubbleSort-button {
     background-color: #add8e6;
-    
+}
+
+.bubbleSort-button:hover {
+    background-color: #87cefa;
+    /* darker shade on hover */
 }
 
 .heapSort-button {
     background-color: #d3d3d3;
-   
+}
+
+.heapSort-button:hover {
+    background-color: #a9a9a9;
+    /* darker shade on hover */
+}
+
+.selectionSort-button {
+    background-color: #f08080;
+}
+
+.selectionSort-button:hover {
+    background-color: #fa8072;
+    /* darker shade on hover */
+}
+
+.insertionSort-button {
+    background-color: #c71585;
+}
+
+.insertionSort-button:hover {
+    background-color: #8b008b;
+    /* darker shade on hover */
 }
