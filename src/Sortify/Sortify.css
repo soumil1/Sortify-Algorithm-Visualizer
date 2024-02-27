@@ -1,6 +1,10 @@
 .element-container {
     position: absolute;
     left: 100px;
+    display: flex;
+    justify-content: center;
+    height: 92vh;
+    align-items: flex-end;
 }
 
 .array-bar {
@@ -12,20 +16,29 @@
 }
 
 .button {
-    width: 480px;
-    height: 120px;
-    font-size: 24px;
     border: none;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+
 .button-container {
     display: flex;
     justify-content: center;
     gap: 20px;
+    order: -1;
+    margin-top: 20px;
 }
 
+.GenerateArray {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    width: 150px;
+    height: 50px;
+    
+}
 
 .button:hover {
     transform: scale(1.2);
@@ -70,28 +83,28 @@
 }
 
 .heapSort-button {
-    background-color: #d3d3d3;
+    background-color: #dda0dd;
 }
 
 .heapSort-button:hover {
-    background-color: #a9a9a9;
+    background-color: #ba55d3;
     /* darker shade on hover */
 }
 
 .selectionSort-button {
-    background-color: #f08080;
+    background-color: ;
 }
 
 .selectionSort-button:hover {
-    background-color: #fa8072;
+    background-color: ;
     /* darker shade on hover */
 }
 
 .insertionSort-button {
-    background-color: #c71585;
+    background-color: lightcoral;
 }
 
 .insertionSort-button:hover {
-    background-color: #8b008b;
+    background-color: pink;
     /* darker shade on hover */
 }

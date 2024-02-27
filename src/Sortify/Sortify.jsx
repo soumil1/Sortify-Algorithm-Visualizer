@@ -3,6 +3,8 @@ import {mergeSortAlgorithm} from '../sortingAlgorithms/mergeSort.js';
 import {quickSortAlgorithm} from '../sortingAlgorithms/quickSort.js';
 import {bubbleSortAlgorithm} from '../sortingAlgorithms/bubbleSort.js';
 import {heapSortAlgorithm} from '../sortingAlgorithms/heapSort.js';
+import {selectionSortAlgorithm} from '../sortingAlgorithms/selectionSort.js';
+import {insertionSortAlgorithm} from '../sortingAlgorithms/insertionSort.js';
 import './Sortify.css';
 
 export default class Sortify extends React.Component {
@@ -126,12 +128,65 @@ export default class Sortify extends React.Component {
         }
     };
 
+
     selectionSort() {
-        
+        const animations = selectionSortAlgorithm(this.state.array);
+        const sortArray = Array.from(document.getElementsByClassName('array-bar'));
+        animations.forEach((animation, i) => {
+            const [firstIndex, secondIndex, newHeight] = animation;
+            const isColorChange = i % 4 < 2;
+            if (isColorChange) {
+                const firstBarStyle = sortArray[firstIndex].style;
+                const secondBarStyle = sortArray[secondIndex].style;
+                const color = i % 4 === 0 ? 'red' : 'turquoise';
+                setTimeout(() => {
+                    firstBarStyle.backgroundColor = color;
+                    secondBarStyle.backgroundColor = color;
+                }, i * 1);
+            } else {
+                const barStyle = sortArray[firstIndex].style;
+                setTimeout(() => {
+                    barStyle.height = `${newHeight}px`;
+                }, i * 1);
+            }
+        });
     }
 
     insertionSort() {
-        
+        const animations = insertionSortAlgorithm(this.state.array);
+        const sortArray = Array.from(document.getElementsByClassName('array-bar'));
+        const delay = 0.5; 
+        for (let i = 0; i < animations.length; i++) {
+            const isColorChange = i % 4 < 2;
+            if (isColorChange) {
+                const [barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = sortArray[barOneIdx] && sortArray[barOneIdx].style;
+                const barTwoStyle = sortArray[barTwoIdx] && sortArray[barTwoIdx].style;
+                const color = i % 4 === 0 ? 'turquoise' : 'lightblue'; 
+                if (barOneStyle) barOneStyle.backgroundColor = color;
+                if (barTwoStyle) barTwoStyle.backgroundColor = color;
+                setTimeout(() => {
+                    if (barOneStyle) barOneStyle.backgroundColor = 'rgb(50, 50, 200)';
+                    if (barTwoStyle) barTwoStyle.backgroundColor = 'rgb(50, 50, 200)';
+                }, i * delay);
+            } else {
+                const [barOneIdx, newHeight] = animations[i];
+                const barOneStyle = sortArray[barOneIdx] && sortArray[barOneIdx].style;
+                if (barOneStyle) {
+                    barOneStyle.height = `${newHeight}px`;
+                    barOneStyle.backgroundColor = 'turquoise';
+                }
+                setTimeout(() => {
+                    if (barOneStyle) {
+                        barOneStyle.height = `${newHeight}px`;
+                        barOneStyle.backgroundColor = 'rgb(50, 50, 200)';
+                    }
+                }, i);
+            }
+        }
+        setTimeout(() => {
+            this.setState({array: this.state.array.sort((a, b) => a - b)});
+        }, animations.length);
     }
 
     testSortingAlgorithms() {
@@ -151,11 +206,7 @@ export default class Sortify extends React.Component {
         const { array } = this.state;
 
         return (
-            <div className="element-container">
-                {array.map((value, idx) => (
-                    <div className="array-bar" key={idx} style={{ height: `${value}px` }}>
-                    </div>
-                ))}
+            <div className="main-container">
                 <div className="button-container">
                     <button className="initializing-button" onClick={() => this.resetArray()}>Generate An Array</button>
                     <button className="mergeSort-button" onClick={() => this.mergeSort()}>Merge Sort</button>
@@ -164,6 +215,11 @@ export default class Sortify extends React.Component {
                     <button className="heapSort-button" onClick={() => this.heapSort()}>Heap Sort</button>
                     <button className="selectionSort-button" onClick={() => this.selectionSort()}>Selection Sort</button>
                     <button className="insertionSort-button" onClick={() => this.insertionSort()}>Insertion Sort</button>
+                </div>
+                <div className="element-container">
+                    {array.map((value, idx) => (
+                        <div className="array-bar" key={idx} style={{ height: `${value}px` }}></div>
+                    ))}
                 </div>
             </div>
         );
