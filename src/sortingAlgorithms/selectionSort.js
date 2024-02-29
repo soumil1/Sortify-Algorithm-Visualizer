@@ -1,24 +1,24 @@
-export function selectionSortAlgorithm(array) {
-  const animations = [];
-  const n = array.length;
+export function* selectionSortAlgorithm(array) {
+  let n = array.length;
+  let auxArray = array.slice();
   for (let i = 0; i < n - 1; i++) {
     let minIdx = i;
+    let minValue = auxArray[i];
     for (let j = i + 1; j < n; j++) {
-      animations.push([minIdx, j]);
-      animations.push([minIdx, j]);
-      if (array[j] < array[minIdx]) {
+      if (auxArray[j] < minValue) {
         minIdx = j;
+        minValue = auxArray[j];
       }
     }
-    animations.push([minIdx, array[i]]);
-    animations.push([i, array[minIdx]]);
-    swap(array, i, minIdx);
+    if (minIdx !== i) {
+      yield [minIdx, auxArray[minIdx], i, auxArray[i]];
+      swap(auxArray, minIdx, i);
+    }
   }
-  return animations;
 }
 
-function swap(array, i, j) {
-  let temp = array[i];
-  array[i] = array[j];
-  array[j] = temp;
+function swap(auxArray, a, b) {
+  let t = auxArray[a];
+  auxArray[a] = auxArray[b];
+  auxArray[b] = t;
 }
