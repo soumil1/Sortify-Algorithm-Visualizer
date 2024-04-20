@@ -1,13 +1,14 @@
-import React from 'react';
+import React from'react';
 import Sortify from './Sortify/Sortify';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <Sortify></Sortify>
-    </div>
-    
+    <React.Fragment>
+      <div className="App">
+        <Sortify />
+      </div>
+    </React.Fragment>
   );
 }
 

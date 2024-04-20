@@ -12,8 +12,20 @@ export default class Sortify extends React.Component {
         super(downs);
         this.state = {
             array: downs.array || [],
+            sorting: false,
+            numBars: 80,
+            speed: 60,
+        }
     }
-}
+
+    handleNumBarsChange(event) {
+        this.setState({ numBars: event.target.value });
+        this.resetArray();
+    }
+
+    handleSpeedChange(event) {
+        this.setState({ speed: event.target.value });
+    }
 
     // component loads for the first time
     componentDidMount() {
@@ -22,34 +34,38 @@ export default class Sortify extends React.Component {
 
     resetArray() {
         const newArr = [];
-        for (let p = 0; p < 310; p++) {
-            newArr.push(randomIntFromInterval(5, 610));
+        for (let p = 0; p < this.state.numBars; p++) {
+            newArr.push(randomIntFromInterval(5, 550));
         }
-        this.setState({array: newArr});
+        this.setState({ array: newArr });
     }
 
     mergeSort() {
+        this.setState({ sorting: true });
         const animations = mergeSortAlgorithm(this.state.array);
-        for(let p = 0; p < animations.length; p++) {
-            const arrayBars = document.getElementsByClassName('array-bar');
-            const isColorChange = p % 3 !== 2;
-            if(isColorChange) {
-                const [barOneIdx, barTwoIdx] = animations[p];
-                const barOneStyle = arrayBars[barOneIdx].style;
-                const barTwoStyle = arrayBars[barTwoIdx].style;
-                const color = p % 3 === 0 ? 'red' : 'turquoise';
-                setTimeout(() => {
-                    barOneStyle.backgroundColor = color;
-                    barTwoStyle.backgroundColor = color;
-                }, p * 3);
+        const arrayBars = Array.from(document.getElementsByClassName('array-bar'));
+        let animationIndex = 0;
+        const animationInterval = setInterval(() => {
+            const animation = animations[animationIndex];
+            const isColorChange = animationIndex % 3 !== 2;
+            const color = animationIndex % 3 === 0 ? 'ed' : 'turquoise';
+            if (isColorChange) {
+                const [barOneIdx, barTwoIdx] = animation;
+                const barOneStyle = arrayBars[barOneIdx]?.style;
+                const barTwoStyle = arrayBars[barTwoIdx]?.style;
+                barOneStyle.backgroundColor = color;
+                barTwoStyle.backgroundColor = color;
             } else {
-                setTimeout(() => {
-                    const [barOneIdx, newHeight] = animations[p];
-                    const barOneStyle = arrayBars[barOneIdx].style;
-                    barOneStyle.height = `${newHeight}px`;
-                }, p * 3);
+                const [barOneIdx, newHeight] = animation;
+                const barOneStyle = arrayBars[barOneIdx]?.style;
+                barOneStyle.height = `${newHeight}px`;
             }
-        }
+            animationIndex++;
+            if (animationIndex >= animations.length) {
+                clearInterval(animationInterval);
+                this.setState({ sorting: false });
+            }
+        }, this.state.speed);
     }
 
     quickSort() {
@@ -199,30 +215,50 @@ export default class Sortify extends React.Component {
     }
 
     render() {
-        const { array } = this.state;
-
         return (
             <div className="main-container">
                 <div className="button-container">
                     <button className="initializing-button" onClick={() => this.resetArray()}>Generate An Array</button>
-                    <button className="mergeSort-button" onClick={() => this.mergeSort()}>Merge Sort</button>
+                    <button className="mergeSort-button" onClick={() => this.mergeSort()} disabled={this.state.sorting}>Merge Sort</button>
                     <button className="quickSort-button" onClick={() => this.quickSort()}>Quick Sort</button>
                     <button className="bubbleSort-button" onClick={() => this.bubbleSort()}>Bubble Sort</button>
                     <button className="heapSort-button" onClick={() => this.heapSort()}>Heap Sort</button>
                     <button className="selectionSort-button" onClick={() => this.selectionSort()}>Selection Sort</button>
                     <button className="insertionSort-button" onClick={() => this.insertionSort()}>Insertion Sort</button>
+                    <div className="slider-container">
+                        <input
+                            type="range"
+                            min="50"
+                            max="90"
+                            value={this.state.numBars}
+                            className="slider"
+                            id="numBarsSlider"
+                            onChange={this.handleNumBarsChange.bind(this)}
+                        />
+                        <span className="slider-label" style={{ color: 'red' }}>Number of Bars: {this.state.numBars}</span>
+                    </div>
+                    <div className="slider-container">
+                        <input
+                            type="range"
+                            min="50"
+                            max="100"
+                            value={this.state.speed}
+                            className="slider"
+                            id="speedSlider"
+                            onChange={this.handleSpeedChange.bind(this)}
+                        />
+                        <span className="slider-label" style={{ color: "red" }}>Speed: {this.state.speed}</span>
+                    </div>
                 </div>
                 <div className="element-container">
-                    {array.map((value, idx) => (
+                    {this.state.array.map((value, idx) => (
                         <div className="array-bar" key={idx} style={{ height: `${value}px` }}></div>
                     ))}
                 </div>
             </div>
         );
-        
     }
 }
-
 function randomIntFromInterval(min, max) { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
