@@ -24,7 +24,6 @@
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-
 .button-container {
     display: flex;
     align-items: center     ;
