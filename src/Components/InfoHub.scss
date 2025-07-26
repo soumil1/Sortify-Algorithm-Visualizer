@@ -1,0 +1,62 @@
+@use '../Sortify/Sortify.scss' as s;
+
+.info-hub {
+    position: absolute;
+    top: 7rem;
+    left: 1rem;
+    max-width: 260px;
+    padding: 0.6rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 20;
+
+    .dark & {
+        background-color: rgba(30, 41, 59, 0.7);
+    }
+}
+
+.info-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: s.$color-sorted;
+    margin-bottom: 0.5rem;
+}
+
+.info-description {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.info-complexity {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.complexity-box {
+    flex: 1;
+    padding: 0.4rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0.5rem;
+    text-align: center;
+
+    .dark & {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    strong {
+        display: block;
+        font-size: 0.65rem;
+        opacity: 0.8;
+    }
+
+    span {
+        font-family: monospace;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+}
