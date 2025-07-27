@@ -1,4 +1,3 @@
-import React from 'react';
 import './InfoHub.scss';
 
 const ALGORITHM_DATA = {

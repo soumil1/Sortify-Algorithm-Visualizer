@@ -14,25 +14,50 @@ import { selectionSortAlgorithm as getSelectionSortAnimations } from '../sorting
 
 const randomIntFromInterval = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
+const getResponsiveArraySize = () => {
+    const width = window.innerWidth;
+    if (width < 640) return { defaultSize: 40, maxSize: 60 };
+    if (width < 1024) return { defaultSize: 60, maxSize: 100 };
+    return { defaultSize: 80, maxSize: 150 };
+};
+
 export default class Sortify extends React.Component {
     constructor(props) {
         super(props);
+        const { defaultSize, maxSize } = getResponsiveArraySize();
         this.state = {
             array: [],
-            arraySize: 80,
+            arraySize: defaultSize,
+            maxArraySize: maxSize,
             animationSpeed: 50,
             isSorting: false,
             isSorted: false,
             isPostSortDelay: false,
             activeAlgorithm: null,
             comparingIndices: [],
-            actionIndices: [], 
+            actionIndices: [],
             sortedIndices: new Set(),
         };
         this.timeoutIds = [];
     }
 
-    componentDidMount() { this.resetArray(); }
+    componentDidMount() {
+        this.resetArray();
+        window.addEventListener('resize', this.handleResize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+    }
+
+    handleResize = () => {
+        const { maxSize } = getResponsiveArraySize();
+        const newSize = Math.min(this.state.arraySize, maxSize);
+        this.setState({ maxArraySize: maxSize, arraySize: newSize }, () => {
+            this.resetArray();
+        });
+    }
+
     handleSizeChange = (newSize) => { this.setState({ arraySize: newSize }, () => this.resetArray()); }
     handleSpeedChange = (newSpeed) => { this.setState({ animationSpeed: newSpeed }); }
     clearAllTimeouts = () => { this.timeoutIds.forEach(clearTimeout); this.timeoutIds = []; };
@@ -50,46 +75,25 @@ export default class Sortify extends React.Component {
         });
     };
 
-    stopSorting = () => {
-        this.resetArray();
-    };
+    stopSorting = () => { this.resetArray(); };
 
     runSort = (algorithmName, algorithmFunc) => {
         if (this.state.isSorting || this.state.isPostSortDelay) return;
-
         this.clearAllTimeouts();
         this.resetArray();
-
         setTimeout(() => {
-            this.setState({
-                isSorting: true,
-                isSorted: false,
-                activeAlgorithm: algorithmName,
-            });
-
+            this.setState({ isSorting: true, isSorted: false, activeAlgorithm: algorithmName });
             const animations = algorithmFunc(this.state.array.map(item => item.value));
             const delay = 100 - this.state.animationSpeed;
-
             animations.forEach((animation, i) => {
                 const timeoutId = setTimeout(() => {
-                    let newComparing = [];
-                    let newAction = [];
-
-                    if (animation.type === 'compare') {
-                        newComparing = animation.indices;
-                    } else if (animation.type !== 'sorted') {
-                        newAction = animation.indices || [animation.index];
-                    }
-
                     this.setState({
-                        comparingIndices: newComparing,
-                        actionIndices: newAction,
+                        comparingIndices: animation.type === 'compare' ? animation.indices : [],
+                        actionIndices: animation.type !== 'compare' && animation.type !== 'sorted' ? (animation.indices || [animation.index]) : [],
                     });
-
                     if (animation.type === 'sorted') {
                         this.setState(prevState => ({ sortedIndices: new Set(prevState.sortedIndices).add(animation.index) }));
                     }
-
                     if (animation.type === 'swap') {
                         this.setState(prevState => {
                             const newArray = [...prevState.array];
@@ -104,12 +108,9 @@ export default class Sortify extends React.Component {
                             return { array: newArray };
                         });
                     }
-
                     if (i === animations.length - 1) {
                         this.setState({ isSorting: false, isSorted: true, comparingIndices: [], actionIndices: [], isPostSortDelay: true });
-                        const postSortTimer = setTimeout(() => {
-                            this.setState({ isPostSortDelay: false });
-                        }, 3000);
+                        const postSortTimer = setTimeout(() => { this.setState({ isPostSortDelay: false }); }, 3000);
                         this.timeoutIds.push(postSortTimer);
                     }
                 }, i * delay);
@@ -119,9 +120,8 @@ export default class Sortify extends React.Component {
     };
 
     render() {
-        const { array, arraySize, animationSpeed, isSorting, isSorted, isPostSortDelay, activeAlgorithm, comparingIndices, actionIndices, sortedIndices } = this.state;
+        const { array, arraySize, maxArraySize, animationSpeed, isSorting, isSorted, isPostSortDelay, activeAlgorithm, comparingIndices, actionIndices, sortedIndices } = this.state;
         const { darkMode, toggleDarkMode } = this.props;
-
         const algorithms = [{ name: 'Merge Sort', func: getMergeSortAnimations }, { name: 'Quick Sort', func: getQuickSortAnimations }, { name: 'Heap Sort', func: getHeapSortAnimations }, { name: 'Bubble Sort', func: getBubbleSortAnimations }, { name: 'Insertion Sort', func: getInsertionSortAnimations }, { name: 'Selection Sort', func: getSelectionSortAnimations },];
 
         return (
@@ -137,6 +137,7 @@ export default class Sortify extends React.Component {
                     isSorting={isSorting}
                     isDarkMode={darkMode}
                     arraySize={arraySize}
+                    maxArraySize={maxArraySize}
                     animationSpeed={animationSpeed}
                     activeAlgorithm={activeAlgorithm}
                     isSorted={isSorted}
@@ -151,23 +152,12 @@ export default class Sortify extends React.Component {
                         const isComparing = comparingIndices.includes(idx);
                         const isAction = actionIndices.includes(idx);
                         const isSortedFinal = isSorted || sortedIndices.has(idx);
-
                         let barClassName = 'array-bar';
-                        if (isSorting && !(isComparing || isAction || isSortedFinal)) {
-                        } else {
-                            barClassName += ' bar-active';
-                        }
-
+                        if (isSorting && !(isComparing || isAction || isSortedFinal)) { } else { barClassName += ' bar-active'; }
                         if (isAction) barClassName += ' bar-action';
                         else if (isComparing) barClassName += ' bar-comparing';
-
-                        if (isSortedFinal) {
-                            barClassName = 'array-bar bar-sorted bar-active';
-                        }
-
-                        return (
-                            <motion.div layout key={id} className={barClassName} style={{ height: `${value}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }} />
-                        );
+                        if (isSortedFinal) { barClassName = 'array-bar bar-sorted bar-active'; }
+                        return (<motion.div layout key={id} className={barClassName} style={{ height: `${value}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }} />);
                     })}
                 </motion.main>
 

@@ -39,7 +39,7 @@ export const Footer = ({ activeAlgorithm, isSorting, isSorted }) => {
                     </a>
                 </div>
             </div>
-            <p className="footer-copyright">©2025 - Sortify Sorting Visualizer. All rights reserved</p>
+            <p className="footer-copyright">©2025 Sortify - Sorting Visualizer. All rights reserved</p>
         </footer>
     );
 };

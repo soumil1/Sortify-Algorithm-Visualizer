@@ -11,7 +11,7 @@ $color-sorted: #8b5cf6;
     flex-direction: column;
     height: 100vh;
     font-family: $font-family;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .header {
@@ -30,7 +30,7 @@ $color-sorted: #8b5cf6;
 
 .header-content {
     display: flex;
-    flex-wrap: nowrap; 
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
@@ -44,25 +44,25 @@ $color-sorted: #8b5cf6;
     gap: 1rem;
 
     &.left {
-        flex-shrink: 0; 
+        flex-shrink: 0;
         justify-content: flex-start;
     }
 
     &.center {
-        flex: 1; 
+        flex: 1;
         justify-content: center;
-        min-width: 0; 
+        min-width: 0;
     }
 
     &.right {
-        flex-shrink: 0; 
+        flex-shrink: 0;
         justify-content: flex-end;
     }
 }
 
 .controls-group {
     display: flex;
-    flex-wrap: nowrap; 
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
