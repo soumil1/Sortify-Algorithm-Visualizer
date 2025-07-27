@@ -10,7 +10,7 @@ export const Header = ({ onGenerateArray, onStop, onRunSort, onSetArraySize, onS
         <motion.header layout className="header">
             <div className="header-content">
                 <div className="header-section left">
-                    <a href="https://github.com/your-username/Sortify-Algorithm-Visualizer" target="_blank" rel="noopener noreferrer" className="sortify-title">
+                    <a href="https://github.com/soumil1/Sortify-Algorithm-Visualizer" target="_blank" rel="noopener noreferrer" className="sortify-title">
                         Sortify
                     </a>
                     <div className="controls-group">
